@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask import jsonify
+from flask import request
 import os
 
 if os.getenv("VCAP_APP_PORT") > 1024:
@@ -77,22 +78,24 @@ def get_catalog():
     response.status_code = 200
     return response
 
-@app.route('/v2/service_instances/<int:instance_id>', methods=['PUT'])
+@app.route('/v2/service_instances/<instance_id>', methods=['PUT'])
 def bind_service(instance_id):
-    response.status_code = 503
-    response = jsonify({'description':'recu bind service_instance %d => pas implemente' %instance_id})
+    paramincomplete = request.args.get('accepts_incomplete', '')
+    response = jsonify({'description':'recu bind service_instance %s, avec le param accepts_incomplete %s => pas implemente' % (instance_id, paramincomplete)})
+    response.status_code = 409
+    response.headers['X-DIEGO'] = paramincomplete
     return response
 
 @app.route('/v2/service_instances/<int:instance_id>/service_bindings/<int:binding_id>',  methods=['DELETE'])
 def unbinding(instance_id,binding_id):
-    response.status_code = 503
     response = jsonify({'description':'recu unbind service_instance %d, plan_id %d => pas implemente' % (instance_id, binding_id)})
+    response.status_code = 503
     return response
 
 @app.route('/v2/service_instances/<int:instance_id>', methods=['DELETE'])
 def deprovisioning(instance_id):
-    response.status_code = 503
     response = jsonify(myUnsupportedOperation)
+    response.status_code = 503
     return response
 
 

@@ -8,4 +8,11 @@ L'application a ete testee sur CFv220+ avec le BP Python de la communaute
 
 fguichard@bosh-cli:~$ cf create-service-broker python-broker toto titi http://monserveur:monport
 
-cf enable-service-access python-broker
+cf service-access
+
+cf enable-service-access <mon_service>
+
+Le repertoire vendor contient le module flask et le dependance enfin de permettre
+d'etre installe sur un runner/cell offline :
+
+pip install --download vendor -r requirements.txt
